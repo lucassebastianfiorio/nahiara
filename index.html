@@ -1,11 +1,434 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mis 15 - Nahiara</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --primary-light: #9b59b6;
+            --accent: #d4af37; /* Gold */
+            --bg-dark: #12001a;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-white: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2 {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(18, 0, 26, 0.4), var(--bg-dark)), 
+                        url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'); /* Fallback */
+            background-image: linear-gradient(to bottom, rgba(18, 0, 26, 0.4), var(--bg-dark)), 
+                              url('nahiara_hero_1774571362091.png'); /* Local image */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .hero-content {
+            z-index: 2;
+            padding: 20px;
+            animation: fadeInScale 1.5s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        /* Countdown */
+        .countdown-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .countdown-item {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 15px 10px;
+            border-radius: 12px;
+            min-width: 70px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .countdown-item:nth-child(2) { animation-delay: 0.2s; }
+        .countdown-item:nth-child(3) { animation-delay: 0.4s; }
+        .countdown-item:nth-child(4) { animation-delay: 0.6s; }
+
+        .countdown-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 80px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 40px 25px;
+            border-radius: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .gallery-item {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Details */
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border-radius: 50%;
+        }
+
+        /* Button */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--accent), #f1c40f);
+            color: var(--bg-dark);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            background: var(--bg-dark);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 10px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        iframe {
+            width: 100%;
+            border-radius: 12px;
+            border: none;
+            height: 350px;
+        }
+
+        /* Animations */
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 400px) {
+            .hero h1 { font-size: 4rem; }
+            .countdown-container { gap: 8px; }
+            .countdown-item { min-width: 60px; padding: 10px 5px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>hello world</h1>
+
+    <main>
+        <!-- Welcome section -->
+        <section class="hero">
+            <div class="hero-content">
+                <p>Estás Invitado a</p>
+                <h1>Nahiara</h1>
+                <p>Mis XV Años</p>
+                
+                <div class="countdown-container" id="countdown">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-label">Días</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-label">Hrs</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-label">Min</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-label">Seg</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Message Section -->
+        <section>
+            <div class="glass-card">
+                <h2 class="section-title">Nuestra Fiesta</h2>
+                <p style="margin-bottom: 25px;">Hay momentos que son para siempre. Quiero compartir con vos la alegría de celebrar mis 15 años.</p>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">📅</div>
+                        <div>
+                            <strong>Sábado 25 de Enero</strong><br>
+                            <span>21:00 hs.</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <div>
+                            <strong>Milenium Trelew</strong><br>
+                            <span>Av. H. Yrigoyen 1100</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">👗</div>
+                        <div>
+                            <strong>Dress Code</strong><br>
+                            <span>Elegante</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn" id="btn-map">CÓMO LLEGAR</button>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section>
+            <h2 class="section-title">Buscame</h2>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1535254973040-607b474cb8c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cake" id="gallery-img-1">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Ballroom" id="gallery-img-2">
+                </div>
+                <div class="gallery-item" style="grid-column: span 2; aspect-ratio: 16/9;">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80" alt="Hero" id="gallery-img-3">
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP Section -->
+        <section>
+            <div class="glass-card">
+                <h2 class="section-title">Confirmar</h2>
+                <p>Por favor, confirmá tu asistencia antes del 10 de Enero.</p>
+                <a href="https://wa.me/549123456789?text=Hola%20Nahiara!%20Confirmo%20mi%20asistencia%20a%20tu%20fiesta." class="btn" target="_blank">CONFIRMAR POR WHATSAPP</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Map Modal -->
+    <div class="modal" id="map-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23248.069474714262!2d-65.33583738916013!3d-43.25123979999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xbe0144b5869e54c9%3A0x3a43fc204cd7e08d!2sMilenium%20Trelew!5e0!3m2!1ses!2sar!4v1774571216372!5m2!1ses!2sar" loading="lazy"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Use local images if they exist, otherwise use fallback
+        const localImages = {
+            'hero': 'nahiara_hero_1774571362091.png',
+            'gallery1': 'nahiara_gallery_1_1774571378203.png',
+            'gallery2': 'nahiara_gallery_2_1774571395103.png'
+        };
+
+        // Try to load local images
+        const heroSection = document.querySelector('.hero');
+        const img1 = document.getElementById('gallery-img-1');
+        const img2 = document.getElementById('gallery-img-2');
+        const img3 = document.getElementById('gallery-img-3');
+
+        // Simple check: if we are in local env, these should work
+        heroSection.style.backgroundImage = `linear-gradient(to bottom, rgba(18, 0, 26, 0.4), var(--bg-dark)), url('${localImages.hero}')`;
+        img1.src = localImages.gallery1;
+        img2.src = localImages.gallery2;
+        img3.src = localImages.hero;
+
+        // Countdown Timer
+        // We use 2027 to show a working countdown, but the text says 2026 as requested
+        const targetDate = new Date("Jan 25, 2027 21:00:00").getTime(); 
+
+        const updateCountdown = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(updateCountdown);
+                document.getElementById("countdown").innerHTML = "¡LLEGÓ EL DÍA!";
+            }
+        }, 1000);
+
+        // Modal Logic
+        const btnMap = document.getElementById('btn-map');
+        const mapModal = document.getElementById('map-modal');
+        const closeModal = document.getElementById('close-modal');
+
+        btnMap.onclick = () => mapModal.classList.add('active');
+        closeModal.onclick = () => mapModal.classList.remove('active');
+        window.onclick = (event) => {
+            if (event.target == mapModal) mapModal.classList.remove('active');
+        }
+    </script>
 </body>
 </html>
