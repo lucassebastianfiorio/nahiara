@@ -18,6 +18,7 @@
             --glass-border: rgba(255, 255, 255, 0.2);
             --text-white: #ffffff;
             --text-dim: rgba(255, 255, 255, 0.7);
+            --error: #e74c3c;
         }
 
         * {
@@ -50,9 +51,9 @@
             align-items: center;
             text-align: center;
             background: linear-gradient(to bottom, rgba(18, 0, 26, 0.4), var(--bg-dark)), 
-                        url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'); /* Fallback */
+                        url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
             background-image: linear-gradient(to bottom, rgba(18, 0, 26, 0.4), var(--bg-dark)), 
-                              url('nahiara_hero_1774571362091.png'); /* Local image */
+                              url('nahiara_hero_1774571362091.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -208,11 +209,17 @@
             box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
         .btn:active {
             transform: scale(0.95);
         }
 
-        /* Modal */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -237,24 +244,122 @@
             background: var(--bg-dark);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 10px;
+            padding: 30px 20px;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .close-modal {
             position: absolute;
-            top: -40px;
-            right: 10px;
+            top: 15px;
+            right: 20px;
             color: white;
             font-size: 2rem;
             cursor: pointer;
+            z-index: 10;
         }
 
-        iframe {
+        /* Form Styling */
+        .rsvp-form-step {
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .rsvp-form-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 400;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        input[type="text"], 
+        input[type="number"],
+        textarea,
+        select {
             width: 100%;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
             border-radius: 12px;
-            border: none;
-            height: 350px;
+            padding: 15px;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 12px;
+            text-align: center;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option input:checked + .radio-label {
+            background: var(--accent);
+            color: var(--bg-dark);
+            font-weight: 600;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--glass-border);
+        }
+
+        .step-dot.active {
+            background: var(--accent);
+            width: 24px;
+            border-radius: 10px;
+        }
+
+        .btn-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         /* Animations */
@@ -266,6 +371,11 @@
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateX(20px); }
+            100% { opacity: 1; transform: translateX(0); }
         }
 
         /* Mobile specific adjustments */
@@ -360,9 +470,9 @@
         <!-- RSVP Section -->
         <section>
             <div class="glass-card">
-                <h2 class="section-title">Confirmar</h2>
-                <p>Por favor, confirmá tu asistencia antes del 10 de Enero.</p>
-                <a href="https://wa.me/549123456789?text=Hola%20Nahiara!%20Confirmo%20mi%20asistencia%20a%20tu%20fiesta." class="btn" target="_blank">CONFIRMAR POR WHATSAPP</a>
+                <h2 class="section-title">Asistencia</h2>
+                <p>Tu presencia es nuestro mejor regalo. Por favor, confirmá tu asistencia antes del 10 de Enero.</p>
+                <button class="btn" id="btn-rsvp">CONFIRMAR ASISTENCIA</button>
             </div>
         </section>
     </main>
@@ -370,33 +480,132 @@
     <!-- Map Modal -->
     <div class="modal" id="map-modal">
         <div class="modal-content">
-            <span class="close-modal" id="close-modal">&times;</span>
+            <span class="close-modal" onclick="closeAllModals()">&times;</span>
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23248.069474714262!2d-65.33583738916013!3d-43.25123979999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xbe0144b5869e54c9%3A0x3a43fc204cd7e08d!2sMilenium%20Trelew!5e0!3m2!1ses!2sar!4v1774571216372!5m2!1ses!2sar" loading="lazy"></iframe>
         </div>
     </div>
 
+    <!-- RSVP Modal -->
+    <div class="modal" id="rsvp-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAllModals()">&times;</span>
+            
+            <div class="step-indicator">
+                <div class="step-dot active" data-step="1"></div>
+                <div class="step-dot" data-step="2"></div>
+                <div class="step-dot" data-step="3"></div>
+            </div>
+
+            <form id="rsvp-form">
+                <!-- Step 1: Identification -->
+                <div class="rsvp-form-step active" id="step-1">
+                    <h2 style="font-family: 'Outfit'; font-size: 1.5rem; margin-bottom: 20px; color: var(--accent);">¡Queremos que estés ahí!</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">¿Cuál es tu nombre completo?</label>
+                        <input type="text" id="guest-name" placeholder="Escribe tu nombre aquí..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">¿Confirmas tu asistencia?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" name="attending" id="attending-yes" value="si" checked>
+                                <label for="attending-yes" class="radio-label">¡Sí, ahí estaré!</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="attending" id="attending-no" value="no">
+                                <label for="attending-no" class="radio-label">No puedo ir</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn" style="width: 100%;" onclick="nextStep(2)">Siguiente</button>
+                </div>
+
+                <!-- Step 2: Companions -->
+                <div class="rsvp-form-step" id="step-2">
+                    <h2 style="font-family: 'Outfit'; font-size: 1.5rem; margin-bottom: 20px; color: var(--accent);">Compañeros de aventura</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">¿Vienes con tu grupo familiar o invitados?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" name="is-group" id="group-no" value="no" checked onchange="toggleGroupFields()">
+                                <label for="group-no" class="radio-label">Vengo solo/a</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="is-group" id="group-yes" value="si" onchange="toggleGroupFields()">
+                                <label for="group-yes" class="radio-label">Somos varios</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="group-fields" style="display: none;">
+                        <div class="form-group">
+                            <label class="form-label">¿Cuántos acompañantes son?</label>
+                            <input type="number" id="group-count" min="1" placeholder="Ej: 2">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nombres de los acompañantes</label>
+                            <textarea id="group-names" placeholder="Escribe los nombres separados por comas..." rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="btn-nav">
+                        <button type="button" class="btn btn-outline" style="flex: 1;" onclick="prevStep(1)">Atrás</button>
+                        <button type="button" class="btn" style="flex: 1;" onclick="nextStep(3)">Siguiente</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Food & Submit -->
+                <div class="rsvp-form-step" id="step-3">
+                    <h2 style="font-family: 'Outfit'; font-size: 1.5rem; margin-bottom: 20px; color: var(--accent);">Menú Especial</h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">¿Algún invitado tiene restricciones alimenticias?</label>
+                        <select id="food-restriction">
+                            <option value="ninguna">Ninguna (Como de todo)</option>
+                            <option value="vegetariano">Vegetariano/a</option>
+                            <option value="vegano">Vegano/a</option>
+                            <option value="celiaco">Celíaco/a (Sin TACC)</option>
+                            <option value="otra">Otra restricción</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="other-food-group" style="display: none;">
+                        <label class="form-label">Por favor, detalla la restricción:</label>
+                        <input type="text" id="other-food-detail" placeholder="Ej: Alergia al maní">
+                    </div>
+
+                    <div class="btn-nav">
+                        <button type="button" class="btn btn-outline" style="flex: 1;" onclick="prevStep(2)">Atrás</button>
+                        <button type="submit" class="btn" style="flex: 1;">ENVIAR A WHATSAPP</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Use local images if they exist, otherwise use fallback
+        // Use local images if they exist
         const localImages = {
             'hero': 'nahiara_hero_1774571362091.png',
             'gallery1': 'nahiara_gallery_1_1774571378203.png',
             'gallery2': 'nahiara_gallery_2_1774571395103.png'
         };
 
-        // Try to load local images
         const heroSection = document.querySelector('.hero');
         const img1 = document.getElementById('gallery-img-1');
         const img2 = document.getElementById('gallery-img-2');
         const img3 = document.getElementById('gallery-img-3');
 
-        // Simple check: if we are in local env, these should work
         heroSection.style.backgroundImage = `linear-gradient(to bottom, rgba(18, 0, 26, 0.4), var(--bg-dark)), url('${localImages.hero}')`;
         img1.src = localImages.gallery1;
         img2.src = localImages.gallery2;
         img3.src = localImages.hero;
 
         // Countdown Timer
-        // We use 2027 to show a working countdown, but the text says 2026 as requested
         const targetDate = new Date("Jan 25, 2027 21:00:00").getTime(); 
 
         const updateCountdown = setInterval(function() {
@@ -421,13 +630,109 @@
 
         // Modal Logic
         const btnMap = document.getElementById('btn-map');
+        const btnRSVP = document.getElementById('btn-rsvp');
         const mapModal = document.getElementById('map-modal');
-        const closeModal = document.getElementById('close-modal');
+        const rsvpModal = document.getElementById('rsvp-modal');
 
         btnMap.onclick = () => mapModal.classList.add('active');
-        closeModal.onclick = () => mapModal.classList.remove('active');
+        btnRSVP.onclick = () => rsvpModal.classList.add('active');
+
+        function closeAllModals() {
+            mapModal.classList.remove('active');
+            rsvpModal.classList.remove('active');
+        }
+
         window.onclick = (event) => {
-            if (event.target == mapModal) mapModal.classList.remove('active');
+            if (event.target.classList.contains('modal')) closeAllModals();
+        }
+
+        // Multi-step Form Logic
+        let currentStep = 1;
+
+        function updateStepIndicators() {
+            document.querySelectorAll('.step-dot').forEach(dot => {
+                dot.classList.toggle('active', dot.dataset.step == currentStep);
+            });
+        }
+
+        function nextStep(step) {
+            // Validation for Step 1
+            if (currentStep === 1) {
+                const name = document.getElementById('guest-name').value.trim();
+                if (!name) {
+                    alert("Por favor, ingresa tu nombre.");
+                    return;
+                }
+            }
+            
+            // Skip step 2 if not attending
+            if (currentStep === 1 && document.querySelector('input[name="attending"]:checked').value === 'no') {
+                submitRSVP();
+                return;
+            }
+
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            updateStepIndicators();
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            currentStep = step;
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            updateStepIndicators();
+        }
+
+        function toggleGroupFields() {
+            const groupFields = document.getElementById('group-fields');
+            const isGroup = document.getElementById('group-yes').checked;
+            groupFields.style.display = isGroup ? 'block' : 'none';
+        }
+
+        document.getElementById('food-restriction').onchange = function() {
+            const otherGroup = document.getElementById('other-food-group');
+            otherGroup.style.display = this.value === 'otra' ? 'block' : 'none';
+        };
+
+        // Form Submission
+        document.getElementById('rsvp-form').onsubmit = function(e) {
+            e.preventDefault();
+            submitRSVP();
+        };
+
+        function submitRSVP() {
+            const name = document.getElementById('guest-name').value;
+            const attending = document.querySelector('input[name="attending"]:checked').value;
+            
+            let message = `*Confirmación de Asistencia - Mis 15 Nahiara*\n\n`;
+            message += `👤 *Nombre:* ${name}\n`;
+            message += `✅ *Asistirá:* ${attending === 'si' ? 'Sí' : 'No'}\n`;
+
+            if (attending === 'si') {
+                const isGroup = document.getElementById('group-yes').checked;
+                if (isGroup) {
+                    const count = document.getElementById('group-count').value;
+                    const names = document.getElementById('group-names').value;
+                    message += `👨‍👩‍👧‍👦 *Grupo:* Sí (+${count} acompañantes)\n`;
+                    message += `📝 *Nombres acompañantes:* ${names}\n`;
+                } else {
+                    message += `👨‍👩‍👧‍👦 *Grupo:* No (Invitado individual)\n`;
+                }
+
+                const food = document.getElementById('food-restriction').value;
+                let foodText = food;
+                if (food === 'otra') foodText = document.getElementById('other-food-detail').value;
+                message += `🍽️ *Restricciones alimenticias:* ${foodText}\n`;
+            } else {
+                message += `😔 *Mensaje:* Lamentablemente no podré asistir. ¡Espero que pases un día increíble!`;
+            }
+
+            const phone = "5491136952774"; // You can change this to Nahiara's real number
+            const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappUrl, '_blank');
+            closeAllModals();
         }
     </script>
 </body>
