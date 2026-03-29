@@ -14,7 +14,7 @@
             --primary-light: #e9ecef;
             --accent: #c0c0c0; /* Silver */
             --accent-shiny: #e0e0e0;
-            --bg-dark: #1a1a1a; /* Very dark grey/black for contrast */
+            --bg-dark: #1a1a1a; 
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.15);
             --text-white: #ffffff;
@@ -38,7 +38,7 @@
             background-image: radial-gradient(circle at center, #2c2c2c 0%, #1a1a1a 100%);
         }
 
-        h1, h2 {
+        h1, h2, .script-font {
             font-family: 'Dancing Script', cursive;
         }
 
@@ -277,6 +277,8 @@
             color: #ffffff;
         }
 
+        .btn-small { padding: 10px 20px; font-size: 0.9rem; margin-top: 10px; }
+
         .btn:active { transform: scale(0.98); }
 
         /* Floating Music Controls */
@@ -298,23 +300,6 @@
             transition: all 0.3s;
         }
 
-        #music-floating:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .music-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            height: 15px;
-        }
-
-        .bar { width: 3px; background: #ffffff; border-radius: 1px; }
-
-        .bar-anim { animation: musicBar 1s ease-in-out infinite alternate; }
-        .bar-anim:nth-child(2) { animation-delay: 0.3s; }
-        .bar-anim:nth-child(3) { animation-delay: 0.6s; }
-
-        @keyframes musicBar { from { height: 4px; } to { height: 15px; } }
-
         /* Modals */
         .modal {
             display: none;
@@ -332,12 +317,14 @@
             background: #1a1a1a;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px; padding: 35px 25px;
-            position: relative; max-height: 90vh; overflow-y: auto;
+            position: relative; max-height: 95vh; overflow-y: auto;
         }
 
-        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 1.8rem; cursor: pointer; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: white; font-size: 1.8rem; cursor: pointer; }
 
-        /* Form */
+        /* Form Steps */
+        .rsvp-form-step { display: none; }
+        .rsvp-form-step.active { display: block; animation: slideIn 0.4s ease-out; }
         .form-group { margin-bottom: 25px; text-align: left; }
         .form-label { display: block; margin-bottom: 10px; color: #adb5bd; font-size: 0.9rem; }
         input, select, textarea {
@@ -345,19 +332,31 @@
             border-radius: 14px; padding: 14px; color: white; outline: none; font-size: 1rem;
         }
 
-        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        @media (max-width: 400px) {
-            .hero h1 { font-size: 3.8rem; }
-            .section-title { font-size: 2.5rem; }
+        .radio-group { display: flex; gap: 10px; margin-top: 10px; }
+        .radio-option { flex: 1; position: relative; }
+        .radio-option input { display: none; }
+        .radio-label {
+            display: block; padding: 12px; text-align: center; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer;
         }
+        .radio-option input:checked + .radio-label { background: #ffffff; color: #1a1a1a; font-weight: 600; }
+
+        .btn-nav { display: flex; gap: 15px; margin-top: 30px; }
+
+        @keyframes musicBar { from { height: 4px; } to { height: 15px; } }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .bar-anim { animation: musicBar 1s ease-in-out infinite alternate; }
+        .music-bars { display: flex; align-items: flex-end; gap: 2px; height: 15px; }
+        .bar { width: 3px; background: #ffffff; border-radius: 1px; }
     </style>
 </head>
 <body>
 
     <!-- Autoplay Music Trigger -->
     <div id="music-overlay">
-        <h2 style="font-family: 'Dancing Script'; font-size: 3.5rem; color: #ffffff; margin-bottom: 25px;">Estás Invitado/a</h2>
+        <h2 class="script-font" style="font-size: 3.5rem; color: #ffffff; margin-bottom: 25px;">Estás Invitado/a</h2>
         <p style="margin-bottom: 35px; font-weight: 300; letter-spacing: 3px; color: #adb5bd;">TOCA PARA ABRIR LA EXPERIENCIA</p>
         <button class="btn" onclick="startExperience()" style="width: auto; padding: 18px 60px;">ABRIR ✨</button>
     </div>
@@ -380,14 +379,13 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <div class="guests-badge" id="guests-count-badge">Invitación para X personas</div>
+                <div class="guests-badge" id="guests-count-badge">Cargando lugares...</div>
                 <h1>Nahiara</h1>
                 <p class="intro-phrase">
                     "Hay momentos en la vida que son especiales por sí solos, pero compartirlos con personas como vos los hace inolvidables. Te espero en mis quince."
                 </p>
                 
                 <div class="countdown-container" id="countdown">
-                    <!-- Timer items here -->
                     <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
                     <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
                     <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Min</span></div>
@@ -431,7 +429,6 @@
         <section>
             <h2 class="section-title">Mis Fotos</h2>
             <div class="gallery">
-                <!-- 1: Hero (V), 2: H, 3: H, 4: V, 5: H -->
                 <div class="gallery-item full-width" onclick="openLightbox('1.jpeg')">
                     <img src="1.jpeg" alt="Nahiara 1">
                 </div>
@@ -485,43 +482,59 @@
     <div class="modal" id="rsvp-modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAllModals()">&times;</span>
+            
             <form id="rsvp-form">
+                <!-- Step 1 -->
                 <div class="rsvp-form-step active" id="step-1">
-                    <h2 style="font-size: 1.6rem; margin-bottom: 25px; color: #ffffff;">Confirmación</h2>
+                    <h2 class="script-font" style="font-size: 2.5rem; margin-bottom: 20px; color: #ffffff;">Confirmación</h2>
                     <div class="form-group">
-                        <label class="form-label">Nombre Completo</label>
-                        <input type="text" id="guest-name" required placeholder="Escribe tu nombre...">
+                        <label class="form-label">Tu Nombre Completo</label>
+                        <input type="text" id="guest-name" required placeholder="Escribe tu nombre aquí...">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">¿Asistirás?</label>
+                        <label class="form-label">¿Asistirás a la fiesta?</label>
                         <div class="radio-group">
-                            <div class="radio-option"><input type="radio" name="attending" id="att-yes" value="si" checked><label for="att-yes" class="radio-label">Sí</label></div>
-                            <div class="radio-option"><input type="radio" name="attending" id="att-no" value="no"><label for="att-no" class="radio-label">No</label></div>
+                            <div class="radio-option"><input type="radio" name="attending" id="att-yes" value="si" checked><label for="att-yes" class="radio-label">Sí, estaré ahí</label></div>
+                            <div class="radio-option"><input type="radio" name="attending" id="att-no" value="no"><label for="att-no" class="radio-label">No puedo ir</label></div>
                         </div>
                     </div>
-                    <button type="button" class="btn" onclick="nextStep(2)">Siguiente</button>
+                    <button type="button" class="btn" onclick="goToStep(2)">Siguiente</button>
                 </div>
+
+                <!-- Step 2: Acompañantes (Opcional según lugares) -->
                 <div id="step-2" class="rsvp-form-step">
-                    <h2 style="font-size: 1.6rem; margin-bottom: 25px; color: #ffffff;">Detalles</h2>
+                    <h2 class="script-font" style="font-size: 2.5rem; margin-bottom: 20px; color: #ffffff;">Tus Acompañantes</h2>
                     <div class="form-group">
-                        <label class="form-label">Invitados (Cantidad y nombres)</label>
-                        <textarea id="group-details" placeholder="Ej: 2 - Juan y Maria" rows="3"></textarea>
+                        <label class="form-label" id="companions-label">Indica cantidad y nombres</label>
+                        <textarea id="group-details" placeholder="Ej: 2 personas - Juani y Ana" rows="3"></textarea>
                     </div>
-                    <button type="button" class="btn" onclick="nextStep(3)">Siguiente</button>
+                    <div class="btn-nav">
+                        <button type="button" class="btn btn-outline" style="margin-top:0;" onclick="goToStep(1)">Atrás</button>
+                        <button type="button" class="btn" style="margin-top:0;" onclick="goToStep(3)">Siguiente</button>
+                    </div>
                 </div>
+
+                <!-- Step 3: Comida -->
                 <div id="step-3" class="rsvp-form-step">
-                    <h2 style="font-size: 1.6rem; margin-bottom: 25px; color: #ffffff;">Menú</h2>
+                    <h2 class="script-font" style="font-size: 2.5rem; margin-bottom: 20px; color: #ffffff;">Menú Especial</h2>
                     <div class="form-group">
-                        <label class="form-label">Restricciones alimenticias</label>
+                        <label class="form-label">¿Alguna restricción alimenticia?</label>
                         <select id="food-restriction">
                             <option value="ninguna">Ninguna</option>
                             <option value="vegetariano">Vegetariano/a</option>
                             <option value="vegano">Vegano/a</option>
                             <option value="celiaco">Celíaco/a</option>
-                            <option value="otra">Otra</option>
+                            <option value="otra">Otra (especificar abajo)</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn">ENVIAR A WHATSAPP</button>
+                    <div class="form-group">
+                        <label class="form-label">Detalles (opcional)</label>
+                        <input type="text" id="food-details" placeholder="Ej: Alérgico al maní">
+                    </div>
+                    <div class="btn-nav">
+                        <button type="button" class="btn btn-outline" style="margin-top:0;" onclick="getPreviousStepForFood()">Atrás</button>
+                        <button type="submit" class="btn" style="margin-top:0;">CONFIRMAR ✨</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -533,10 +546,16 @@
     </div>
 
     <script>
-        // Guest Count
+        // Guest Count and URL Params
         const urlParams = new URLSearchParams(window.location.search);
-        const lugares = urlParams.get('lugares') || 'X';
-        document.getElementById('guests-count-badge').innerText = `Invitación para ${lugares} ${lugares == 1 ? 'persona' : 'personas'}`;
+        const lugaresQty = parseInt(urlParams.get('lugares')) || 0;
+        const lugaresLabel = document.getElementById('guests-count-badge');
+        
+        if (lugaresQty > 0) {
+            lugaresLabel.innerText = `Invitación para ${lugaresQty} ${lugaresQty == 1 ? 'persona' : 'personas'}`;
+        } else {
+            lugaresLabel.style.display = 'none';
+        }
 
         // Countdown
         const targetDate = new Date("May 30, 2026 20:30:00").getTime();
@@ -592,26 +611,67 @@
             if(e.target.id == 'lightbox') e.target.style.display = 'none';
         }
 
-        // RSVP Steps
-        let currentStep = 1;
-        function nextStep(s) {
-            if(currentStep == 1 && document.getElementById('att-no').checked) { submitRSVP(); return; }
-            document.getElementById(`step-${currentStep}`).classList.remove('active');
-            currentStep = s;
-            document.getElementById(`step-${currentStep}`).classList.add('active');
+        // RSVP Steps Logic
+        let step = 1;
+        
+        function goToStep(s) {
+            // Validation for Step 1
+            if (step == 1 && s == 2) {
+                if (!document.getElementById('guest-name').value.trim()) {
+                    alert("Por favor, ingresa tu nombre.");
+                    return;
+                }
+                // If not attending, skip everything
+                if (document.getElementById('att-no').checked) {
+                    submitRSVP();
+                    return;
+                }
+                // If attending but only 1 place, skip Step 2
+                if (lugaresQty === 1) {
+                    s = 3;
+                }
+            }
+
+            document.getElementById(`step-${step}`).classList.remove('active');
+            step = s;
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // Adjust Step 2 label
+            if (step == 2) {
+                document.getElementById('companions-label').innerText = `Tu invitación es para ${lugaresQty} personas. Indica los nombres de tus acompañantes:`;
+            }
         }
 
-        document.getElementById('rsvp-form').onsubmit = (e) => { e.preventDefault(); submitRSVP(); }
+        function getPreviousStepForFood() {
+            if (lugaresQty === 1) goToStep(1);
+            else goToStep(2);
+        }
+
+        document.getElementById('rsvp-form').onsubmit = (e) => { 
+            e.preventDefault(); 
+            submitRSVP(); 
+        }
 
         function submitRSVP() {
             const name = document.getElementById('guest-name').value;
             const att = document.querySelector('input[name="attending"]:checked').value;
-            let msg = `*Confirmación de Asistencia - Mis 15 Nahiara*\n👤 *Nombre:* ${name}\n✅ *Asistirá:* ${att=='si'?'Sí':'No'}`;
-            if(att=='si'){
-                msg += `\n👨‍👩‍👧‍👦 *Grupo:* ${document.getElementById('group-details').value}`;
-                msg += `\n🍽️ *Comida:* ${document.getElementById('food-restriction').value}`;
+            
+            let message = `*Confirmación de Asistencia - Mis 15 Nahiara*\n\n`;
+            message += `👤 *Nombre:* ${name}\n`;
+            message += `✅ *Asistirá:* ${att == 'si' ? '¡SÍ, de una!' : 'Lo siento, no puedo :('}\n`;
+
+            if (att == 'si') {
+                if (lugaresQty > 1) {
+                    message += `👨‍👩‍👧‍👦 *Acompañantes:* ${document.getElementById('group-details').value || 'Sin acompañantes'}\n`;
+                }
+                const food = document.getElementById('food-restriction').value;
+                const foodD = document.getElementById('food-details').value;
+                message += `🍽️ *Restricción Alimenticia:* ${food}${foodD ? ' (' + foodD + ')' : ''}\n`;
+                message += `\n✨ ¡Nos vemos pronto!`;
             }
-            window.open(`https://wa.me/5491136952774?text=${encodeURIComponent(msg)}`, '_blank');
+
+            const phone = "5491136952774"; 
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
             closeAllModals();
         }
     </script>
