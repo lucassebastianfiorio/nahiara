@@ -380,7 +380,7 @@
         </div>
     </div>
 
-    <audio id="bg-music" loop>
+    <audio id="bg-music">
         <source src="fondo.mp3" type="audio/mpeg">
     </audio>
 
@@ -437,7 +437,7 @@
 
         <!-- Gallery -->
         <section>
-            <h2 class="section-title">Mis Fotos</h2>
+            <h2 class="section-title">Mis XV</h2>
             <div class="gallery">
                 <div class="gallery-item full-width" onclick="openLightbox('1.jpeg')">
                     <img src="1.jpeg" alt="Nahiara 1">
@@ -584,8 +584,14 @@
         const statusText = document.getElementById('music-status-text');
         const bars = document.querySelectorAll('.bar');
 
+        audio.addEventListener('ended', function() {
+            this.currentTime = 8;
+            this.play();
+        });
+
         function startExperience() {
             overlay.classList.add('hidden');
+            audio.currentTime = 8;
             audio.play().catch(() => {});
             statusText.innerText = 'PAUSAR';
         }
