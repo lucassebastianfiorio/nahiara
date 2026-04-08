@@ -107,15 +107,24 @@
         /* Guests Badge */
         .guests-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #c0c0c0, #ffffff);
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
             color: #1a1a1a;
-            padding: 6px 18px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 25px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-top: 40px;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
         }
 
         /* Countdown */
@@ -175,9 +184,9 @@
 
         /* Gallery */
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
             margin-top: 30px;
         }
 
@@ -201,9 +210,9 @@
             display: block;
         }
 
-        .v-rect { grid-row: span 2; aspect-ratio: 2/3; }
+        .v-rect { aspect-ratio: 4/5; }
         .h-rect { aspect-ratio: 3/2; }
-        .full-width { grid-column: span 2; aspect-ratio: 16/9; }
+        .full-width { aspect-ratio: 16/9; }
 
         /* Lightbox */
         #lightbox {
@@ -379,7 +388,6 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <div class="guests-badge" id="guests-count-badge">Cargando lugares...</div>
                 <h1>Nahiara</h1>
                 <p class="intro-phrase">
                     "Hay momentos en la vida que son especiales por sí solos, pero compartirlos con personas como vos los hace inolvidables. Te espero en mis quince."
@@ -391,6 +399,8 @@
                     <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Min</span></div>
                     <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
                 </div>
+                
+                <div class="guests-badge" id="guests-count-badge">Cargando lugares...</div>
             </div>
         </section>
 
@@ -670,7 +680,7 @@
                 message += `\n✨ ¡Nos vemos pronto!`;
             }
 
-            const phone = "5491136952774"; 
+            const phone = "542804272270"; 
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
             closeAllModals();
         }
